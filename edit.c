@@ -1031,6 +1031,7 @@ static const struct x_ftab x_ftab[] = {
 #include "emacsfn.h"
 };
 
+#ifndef MKSH_LESS_CMDLINE_EDITING
 static struct x_defbindings const x_defbindings[] = {
 	{ XFUNC_del_back,		0,  CTRL_QM	},
 	{ XFUNC_del_bword,		1,  CTRL_QM	},
@@ -1148,6 +1149,33 @@ static struct x_defbindings const x_defbindings[] = {
 	{ XFUNC_edit_line,		2,	'e'	}
 #endif
 };
+#else // MKSH_LESS_CMDLINE_EDITING
+static struct x_defbindings const x_defbindings[] = {
+	{ XFUNC_abort,			0,  CTRL_G	},
+	{ XFUNC_newline,		0,  CTRL_M	},
+	{ XFUNC_newline,		0,  CTRL_J	},
+	{ XFUNC_meta1,			0,  CTRL_BO	},
+	{ XFUNC_meta2,			0,  CTRL_X	},
+	{ XFUNC_meta2,			1,	'['	},
+	{ XFUNC_meta2,			1,	'O'	},
+	{ XFUNC_prev_com,		0,  CTRL_P	},
+	{ XFUNC_prev_com,		2,	'A'	},
+	{ XFUNC_next_com,		0,  CTRL_N	},
+	{ XFUNC_next_com,		2,	'B'	},
+	{ XFUNC_complete,		1,  CTRL_BO	},
+	{ XFUNC_comp_list,		0,  CTRL_I	},
+	{ XFUNC_comp_list,		1,	'='	},
+	{ XFUNC_del_char | 0x80,		2,	'3'	},
+	{ XFUNC_del_back,		0,  CTRL_QM	},
+	{ XFUNC_del_back,		0,  CTRL_H	},
+	{ XFUNC_mv_back,		0,  CTRL_B	},
+	{ XFUNC_mv_back,		2,	'D'	},
+	{ XFUNC_mv_forw,		0,  CTRL_F	},
+	{ XFUNC_mv_forw,		2,	'C'	},
+	{ XFUNC_mv_forw,		3,	77	}
+};
+#endif // MKSH_LESS_CMDLINE_EDITING
+
 
 static size_t
 x_nb2nc(size_t nb)
@@ -1268,6 +1296,12 @@ x_emacs(char *buf)
 
 		f = x_curprefix == -1 ? XFUNC_insert :
 		    x_tab[x_curprefix][c];
+		if (f & 0x80) {
+			f &= 0x7F;
+			if ((i = x_e_getc()) != '~')
+				x_e_ungetc(i);
+		}
+
 #ifndef MKSH_SMALL
 		if (f & 0x80) {
 			f &= 0x7F;

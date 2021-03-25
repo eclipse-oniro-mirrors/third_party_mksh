@@ -788,6 +788,18 @@ Haiku)
 	HAVE_ISSET_MKSH_ASSUME_UTF8=1
 	HAVE_ISOFF_MKSH_ASSUME_UTF8=0
 	;;
+OpenHarmony)
+	add_cppflags -D_GNU_SOURCE
+	add_cppflags -DMKSH_NO_SIGSETJMP
+	add_cppflags -DMKSH_DISABLE_TTY_WARNING
+	: "${HAVE_STRLCPY=0}"
+	: "${HAVE_REVOKE=0}"
+	: "${HAVE_CAN_FSTACKPROTECTORSTRONG=1}"
+	: "${MKSH_SMALL=1}"
+	: "${MKSH_SMALL_BUT_FAST=0}"
+	: "${MKSH_ASSUME_UTF8=1}"
+	: "${MKSH_S_NOVI=1}"
+	;;
 Harvey)
 	add_cppflags -D_POSIX_SOURCE
 	add_cppflags -D_LIMITS_EXTENSION
