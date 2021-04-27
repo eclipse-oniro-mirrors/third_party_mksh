@@ -94,6 +94,7 @@ c_false(const char **wp MKSH_A_UNUSED)
  * A leading * means a POSIX special builtin.
  * A leading ^ means declaration utility, - forwarder.
  */
+#ifndef MKSH_LESS_BUILDINS
 const struct builtin mkshbuiltins[] = {
 	{Tsgdot, c_dot},
 	{"*=:", c_true},
@@ -171,6 +172,22 @@ const struct builtin mkshbuiltins[] = {
 #endif
 	{NULL, (int (*)(const char **))NULL}
 };
+#else // MKSH_LESS_BUILDINS
+const struct builtin mkshbuiltins[] = {
+	{Tsgdot, c_dot},
+	{Talias, c_alias},
+	{Tbcat, c_cat},
+	{Tcd, c_cd},
+	{"kill", c_kill},
+	/* dash compatibility hack */
+	{"chdir", c_cd},
+	{"echo", c_print},
+	{"*=exec", c_exec},
+	{"*=exit", c_exitreturn},
+	{"pwd", c_pwd},
+	{NULL, (int (*)(const char **))NULL}
+};
+#endif // MKSH_LESS_BUILDINS
 
 struct kill_info {
 	int num_width;

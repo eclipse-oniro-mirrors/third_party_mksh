@@ -32,6 +32,7 @@ __RCSID("$MirOS: src/bin/mksh/emacsfn.h,v 1.10 2016/09/01 12:59:09 tg Exp $");
 #define F0 FN
 #endif
 
+#ifndef MKSH_LESS_CMDLINE_EDITING
 F0(abort, "abort", 0)
 FN(beg_hist, "beginning-of-history", 0)
 FN(cls, "clear-screen", 0)
@@ -105,6 +106,33 @@ FN(vt_hack, "vt100-hack", XF_ARG)
 #endif
 FN(xchg_point_mark, "exchange-point-and-mark", 0)
 FN(yank, "yank", 0)
+#else // MKSH_LESS_CMDLINE_EDITING
+F0(abort, "abort", 0)
+FN(insert, "auto-insert", XF_ARG)
+FN(error, "error", 0)
+FN(newline, "newline", 0)
+FN(meta1, "prefix-1", XF_PREFIX)
+FN(meta2, "prefix-2", XF_PREFIX)
+FN(comp_comm, "complete-command", 0)
+FN(comp_file, "complete-file", 0)
+FN(comp_list, "complete-list", 0)
+FN(complete, "complete", 0)
+FN(prev_com, "up-history", XF_ARG)
+FN(next_com, "down-history", XF_ARG)
+FN(del_back, "delete-char-backward", XF_ARG)
+FN(del_char, "delete-char-forward", XF_ARG)
+FN(mv_back, "backward-char", XF_ARG)
+FN(mv_forw, "forward-char", XF_ARG)
+FN(meta_yank, "yank-pop", 0)
+FN(search_hist, "search-history", 0)
+FN(set_arg, "set-arg", XF_NOBIND)
+FN(yank, "yank", 0)
+FN(meta3, "prefix-3", XF_PREFIX)
+FN(prev_histword, "prev-hist-word", XF_ARG)
+FN(del_bword, "delete-word-backward", XF_ARG)
+FN(del_line, "kill-line", 0)
+FN(noop, "no-op", 0)
+#endif // MKSH_LESS_CMDLINE_EDITING
 
 #undef FN
 #undef F0

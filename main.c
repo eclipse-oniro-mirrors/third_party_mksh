@@ -64,6 +64,7 @@ static const char initsubs[] =
     "${TMOUT=0}"
     "${EPOCHREALTIME=}";
 
+#ifndef MKSH_NO_INITCOMS
 static const char *initcoms[] = {
 	Ttypeset, "-r", initvsn, NULL,
 	Ttypeset, "-x", "HOME", TPATH, TSHELL, NULL,
@@ -88,6 +89,7 @@ static const char *initcoms[] = {
 	"make", "mv", "pr", "rm", "sed", Tsh, "vi", "who", NULL,
 	NULL
 };
+#endif // MKSH_NO_INITCOMS
 
 static const char *restr_com[] = {
 	Ttypeset, "-r", TPATH, "ENV", TSHELL, NULL
@@ -229,7 +231,11 @@ main_init(int argc, const char *argv[], Source **sp, struct block **lp)
 	struct block *l;
 	unsigned char restricted_shell, errexit, utf_flag;
 	char *cp;
+#ifndef MKSH_NO_INITCOMS
 	const char *ccp, **wp;
+#else
+	const char *ccp;
+#endif // MKSH_NO_INITCOMS
 	struct tbl *vp;
 	struct stat s_stdin;
 #if !defined(_PATH_DEFPATH) && defined(_CS_PATH)
@@ -419,11 +425,13 @@ main_init(int argc, const char *argv[], Source **sp, struct block **lp)
 		/* setstr can't fail here */
 		setstr(vp, current_wd, KSH_RETURN_ERROR);
 
+#ifndef MKSH_NO_INITCOMS
 	for (wp = initcoms; *wp != NULL; wp++) {
 		c_builtin(wp);
 		while (*wp != NULL)
 			wp++;
 	}
+#endif // MKSH_NO_INITCOMS
 	setint_n(global("OPTIND"), 1, 10);
 
 	kshuid = getuid();

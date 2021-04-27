@@ -564,6 +564,7 @@ comexec(struct op *t, struct tbl * volatile tp, const char **ap,
 			/* POSuX demands ksh88-like behaviour here */
 			if (Flag(FPOSIX))
 				fcflags = FC_PATH;
+#ifndef MKSH_LESS_BUILDINS
 		} else if (tp->val.f == c_command) {
 			bool saw_p = false;
 
@@ -599,6 +600,7 @@ comexec(struct op *t, struct tbl * volatile tp, const char **ap,
 				subst_exstat = 0;
 				break;
 			}
+#endif // MKSH_LESS_BUILDINS
 		} else if (tp->flag & LOW_BI) {
 			/* if we have any flags, do not use the builtin */
 			if ((ap[1] && ap[1][0] == '-' && ap[1][1] != '\0' &&
