@@ -348,7 +348,11 @@ j_change(void)
 			tty_init_talking();
 
 		/* no controlling tty, no SIGT* */
+#ifndef ADAPT_FOR_LITEOS_A
 		if ((ttypgrp_ok = (use_tty && tty_fd >= 0 && tty_devtty))) {
+#else // ADAPT_FOR_LITEOS_A
+		if ((ttypgrp_ok = (use_tty && tty_fd >= 0))) {
+#endif // ADAPT_FOR_LITEOS_A
 			setsig(&sigtraps[SIGTTIN], SIG_DFL,
 			    SS_RESTORE_ORIG|SS_FORCE);
 			/* wait to be given tty (POSIX.1, B.2, job control) */
