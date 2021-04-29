@@ -1,14 +1,7 @@
 # Copyright (c) Huawei Technologies Co., Ltd. 2020. All rights reserved.
-import("//build/lite/config/component/lite_component.gni")
-
-lite_component("mksh") {
-    features = [
-        ":sh"
-    ]
-}
 
 # feature: sh
-executable("sh") {
+executable("mksh") {
     sources = [
         "edit.c",
         "eval.c",
@@ -85,8 +78,6 @@ executable("sh") {
         "-DHAVE_RLIM_T=1",
         "-DHAVE_SIG_T=1",
         "-DHAVE_SYS_ERRLIST=1",
-        "-DHAVE_SYS_SIGNAME=0",
-        "-DHAVE_SYS_SIGLIST=1",
         "-DHAVE_FLOCK=1",
         "-DHAVE_LOCK_FCNTL=1",
         "-DHAVE_GETRUSAGE=1",
