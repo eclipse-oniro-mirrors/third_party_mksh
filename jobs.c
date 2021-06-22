@@ -1353,7 +1353,19 @@ j_sigchld(int sig MKSH_A_UNUSED)
 
 	getrusage(RUSAGE_CHILDREN, &ru0);
 	do {
+#ifdef ADAPT_FOR_LITEOS_A
 		pid = wait(&status);
+#else // ADAPT_FOR_LITEOS_A
+#ifndef MKSH_NOPROSPECTOFWORK
+		pid = waitpid(-1, &status, (WNOHANG |
+#if defined(WCONTINUED) && defined(WIFCONTINUED)
+		    WCONTINUED |
+#endif
+		    WUNTRACED));
+#else
+		pid = wait(&status);
+#endif
+#endif // ADAPT_FOR_LITEOS_A
 
 		/*
 		 * return if this would block (0) or no children
