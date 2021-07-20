@@ -38,7 +38,11 @@
 __RCSID("$MirOS: src/bin/mksh/main.c,v 1.351 2019/01/05 13:24:18 tg Exp $");
 
 #ifndef MKSHRC_PATH
+#ifndef ADAPT_FOR_LITEOS_A
 #define MKSHRC_PATH	"~/.mkshrc"
+#else // ADAPT_FOR_LITEOS_A
+#define MKSHRC_PATH	"/etc/.mkshrc"
+#endif // ADAPT_FOR_LITEOS_A
 #endif
 
 #ifndef MKSH_DEFAULT_TMPDIR
@@ -662,7 +666,11 @@ main_init(int argc, const char *argv[], Source **sp, struct block **lp)
 		if (Flag(FLOGIN))
 			include(substitute("$HOME/.profile", 0), 0, NULL, true);
 		if (Flag(FTALKING)) {
+#ifndef ADAPT_FOR_LITEOS_A
 			cp = substitute("${ENV:-" MKSHRC_PATH "}", DOTILDE);
+#else // ADAPT_FOR_LITEOS_A
+			cp = substitute("${ENV:-" MKSHRC_PATH "}", 0);
+#endif // ADAPT_FOR_LITEOS_A
 			if (cp[0] != '\0')
 				include(cp, 0, NULL, true);
 		}

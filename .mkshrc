@@ -1,0 +1,8 @@
+PS1='OHOS:$PWD$ '
+HOME=/
+
+for i in chgrp chmod chown cp date du free help ifconfig kill mkdir mount mv ping ps rm rmdir top touch umount uname;do alias $i="toybox $i";done
+alias ls='toybox ls --color=auto'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
